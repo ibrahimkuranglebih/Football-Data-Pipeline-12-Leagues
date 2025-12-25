@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: football-postgres
+    environment:
+      POSTGRES_DB: football_db
+      POSTGRES_USER: football_user
+      POSTGRES_PASSWORD: miharbiikun7625
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - football-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U football_user -d football_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  extract_competitions:
+    build: ./extract
+    container_name: extract-competitions
+    depends_on:
+      postgres :
+        condition: service_healthy
+    environment:
+      FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: football_db
+      POSTGRES_USER: football_user
+      POSTGRES_PASSWORD: miharbiikun7625
+    networks:
+      - football-network
+    restart: "no"
+
+volumes:
+  postgres_data:
+
+networks:
+  football-network:
+    driver: bridge
