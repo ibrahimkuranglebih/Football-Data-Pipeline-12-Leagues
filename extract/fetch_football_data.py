@@ -16,7 +16,6 @@ def fetch_data(endpoint: str, params: dict | None = None):
         timeout=30
     )
     response.raise_for_status()
-    print(f"Success fetching {endpoint}")
     return response.json()
 
 def fetch_competitions():
@@ -28,5 +27,3 @@ def fetch_matches_by_competition(competition_id: int):
 def fetch_teams_by_competition(competition_id: int):
     return fetch_data(f"competitions/{competition_id}/teams")
 
-if __name__ == "__main__":
-    fetch_competitions()
