@@ -3,6 +3,7 @@ import psycopg2
 from psycopg2.extras import Json
 import time
 
+#load data
 def connect_to_db():
     print("Connecting to Postgres...")
     try:
@@ -26,44 +27,74 @@ def create_tables(conn):
     cursor.execute("""
         CREATE SCHEMA IF NOT EXISTS raw;
 
-        CREATE TABLE IF NOT EXISTS raw.competitions (
-            competition_id INT PRIMARY KEY,
+        CREATE TABLE raw.competitions (
+            id INT PRIMARY KEY,
             name TEXT,
             code TEXT,
             type TEXT,
             plan TEXT,
             area_id INT,
             area_name TEXT,
+            season_id INT,
             season_start DATE,
             season_end DATE,
-            current_matchday INT,
+            emblem TEXT,
+            last_updated TIMESTAMP,
             raw_payload JSONB,
             inserted_at TIMESTAMP DEFAULT NOW()
         );
 
-        CREATE TABLE IF NOT EXISTS raw.matches (
-            match_id INT PRIMARY KEY,
+        CREATE TABLE raw.matches (
+            id INT PRIMARY KEY,
+            date TIMESTAMP,
+            area_id INT,
             competition_id INT,
             season_id INT,
-            home_team_id INT,
-            away_team_id INT,
-            utc_date TIMESTAMP,
             status TEXT,
-            matchday INT,
+            minute INT,
+            injury_time INT,
+            attendance INT,
             stage TEXT,
             group_name TEXT,
+            home_team JSONB,
+            away_team JSONB,
+            score JSONB,
+            goals JSONB,
+            penalties JSONB,
+            referees JSONB,
             raw_payload JSONB,
             inserted_at TIMESTAMP DEFAULT NOW()
         );
         
-        CREATE TABLE IF NOT EXISTS raw.teams (
-            team_id INT PRIMARY KEY,
+        CREATE TABLE raw.teams (
+            id INT PRIMARY KEY,
+            comp_id INT[],
             name TEXT,
-            short_name TEXT,
-            tla TEXT,
-            area_name TEXT,
-            venue TEXT,
+            code TEXT,
+            flag TEXT,
+            team_emblem TEXT,
             founded INT,
+            venue TEXT,
+            website TEXT,
+            club_colors TEXT,
+            address TEXT,
+            last_updated TIMESTAMP,
+            raw_payload JSONB,
+            inserted_at TIMESTAMP DEFAULT NOW()
+        );
+        
+        CREATE TABLE raw.players (
+            id INT PRIMARY KEY,
+            name TEXT,
+            first_name TEXT,
+            last_name TEXT,
+            date_of_birth DATE,
+            nationality TEXT,
+            position TEXT,
+            current_team JSONB,
+            shirt_number INT,
+            contract JSONB,
+            last_updated TIMESTAMP,
             raw_payload JSONB,
             inserted_at TIMESTAMP DEFAULT NOW()
         );
@@ -72,145 +103,119 @@ def create_tables(conn):
     conn.commit()
     print("Tables ready.")
 
-def insert_records(conn, data):
-    print("Inserting competition records...")
+def insert_competitions(conn, data):
     cursor = conn.cursor()
-
-    competitions = data.get("competitions", [])
-
-    for comp in competitions:
+    for comp in data.get("competitions", []):
         season = comp.get("currentSeason") or {}
-
         cursor.execute("""
-            INSERT INTO raw.competitions (
-                competition_id,
-                name,
-                code,
-                type,
-                plan,
-                area_id,
-                area_name,
-                season_start,
-                season_end,
-                current_matchday,
-                raw_payload
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            ON CONFLICT (competition_id) DO NOTHING;
+            INSERT INTO raw.competitions
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            ON CONFLICT (id) DO NOTHING;
         """, (
             comp.get("id"),
             comp.get("name"),
             comp.get("code"),
             comp.get("type"),
             comp.get("plan"),
-            (comp.get("area") or {}).get("id"),
-            (comp.get("area") or {}).get("name"),
+            comp["area"]["id"],
+            comp["area"]["name"],
+            season.get("id"),
             season.get("startDate"),
             season.get("endDate"),
-            season.get("currentMatchday"),
+            comp.get("emblem"),
+            comp.get("lastUpdated"),
             Json(comp)
         ))
-
     conn.commit()
-    print(f"{len(competitions)} records inserted.")
 
-def insert_matches_from_competitions(conn, competitions_data):
+def insert_matches(conn, competitions):
     cursor = conn.cursor()
-    competitions = competitions_data.get("competitions", [])
-
     for comp in competitions:
-        comp_id = comp.get("id")
-        if not comp_id:
-            continue
-
+        comp_id = comp["id"]
         try:
             data = fetch_matches_by_competition(comp_id)
-            matches = data.get("matches", [])
-
-            for match in matches:
+            for match in data.get("matches", []):
                 cursor.execute("""
-                    INSERT INTO raw.matches (
-                        match_id,
-                        competition_id,
-                        season_id,
-                        home_team_id,
-                        away_team_id,
-                        utc_date,
-                        status,
-                        matchday,
-                        stage,
-                        group_name,
-                        raw_payload
-                    )
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                    ON CONFLICT (match_id) DO NOTHING;
+                    INSERT INTO raw.matches
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    ON CONFLICT (id) DO NOTHING;
                 """, (
                     match.get("id"),
-                    (match.get("competition") or {}).get("id"),
-                    (match.get("season") or {}).get("id"),
-                    (match.get("homeTeam") or {}).get("id"),
-                    (match.get("awayTeam") or {}).get("id"),
                     match.get("utcDate"),
+                    match["area"]["id"] if match.get("area") else None,
+                    comp_id,
+                    match["season"]["id"],
                     match.get("status"),
-                    match.get("matchday"),
+                    match.get("minute"),
+                    match.get("injuryTime"),
+                    match.get("attendance"),
                     match.get("stage"),
                     match.get("group"),
+                    Json(match.get("homeTeam")),
+                    Json(match.get("awayTeam")),
+                    Json(match.get("score")),
+                    Json(match.get("goals")),
+                    Json(match.get("penalties")),
                     Json(match)
                 ))
-
             conn.commit()
             time.sleep(8)
-
         except Exception as e:
-            print(f"Skipping matches for {comp_id}: {e}")
-    
-def insert_teams_from_competitions(conn, competitions_data):
-    print("Fetching teams per competition...")
+            print(f"Skip matches {comp_id}: {e}")
+
+def insert_teams_and_players(conn, competitions):
     cursor = conn.cursor()
 
-    competitions = competitions_data.get("competitions", [])
-
     for comp in competitions:
-        comp_id = comp.get("id")
-        if not comp_id:
-            continue
-
+        comp_id = comp["id"]
         try:
-            teams_data = fetch_teams_by_competition(comp_id)
-            teams = teams_data.get("teams", [])
-
-            for team in teams:
+            data = fetch_teams_by_competition(comp_id)
+            for team in data.get("teams", []):
                 cursor.execute("""
-                    INSERT INTO raw.teams (
-                        team_id,
-                        name,
-                        short_name,
-                        tla,
-                        area_name,
-                        venue,
-                        founded,
-                        raw_payload
-                    )
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    ON CONFLICT (team_id) DO NOTHING;
+                    INSERT INTO raw.teams
+                    VALUES (%s, ARRAY[%s], %s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    ON CONFLICT (id)
+                    DO UPDATE SET
+                        comp_id = array_append(raw.teams.comp_id, %s);
                 """, (
-                    team.get("id"),
-                    team.get("name"),
-                    team.get("shortName"),
-                    team.get("tla"),
-                    (team.get("area") or {}).get("name"),
-                    team.get("venue"),
-                    team.get("founded"),
-                    Json(team)
+                    team["id"],
+                    comp_id,
+                    team["name"],
+                    team["tla"],
+                    team["area"]["flag"],
+                    team["crest"],
+                    team["founded"],
+                    team["venue"],
+                    team["website"],
+                    team["clubColors"],
+                    team["address"],
+                    team["lastUpdated"],
+                    comp_id
                 ))
 
+                for p in team.get("squad", []):
+                    cursor.execute("""
+                        INSERT INTO raw.players
+                        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                        ON CONFLICT (id) DO NOTHING;
+                    """, (
+                        p.get("id"),
+                        p.get("name"),
+                        p.get("firstName"),
+                        p.get("lastName"),
+                        p.get("dateOfBirth"),
+                        p.get("nationality"),
+                        p.get("position"),
+                        Json({"team_id": team["id"]}),
+                        p.get("shirtNumber"),
+                        Json(p.get("contract")),
+                        p.get("lastUpdated"),
+                        Json(p)
+                    ))
             conn.commit()
-            print(f"Inserted teams for competition {comp_id}")
-
-            time.sleep(8)  # ⏱ rate limit protection
-
+            time.sleep(8)
         except Exception as e:
-            print(f"Skipping competition {comp_id}: {e}")
+            print(f"Skip teams {comp_id}: {e}")
 
 from fetch_football_data import (
     fetch_competitions,
@@ -225,9 +230,11 @@ def main():
         create_tables(conn)
 
         competitions_data = fetch_competitions()
-        insert_records(conn, competitions_data)
-        insert_matches_from_competitions(conn, competitions_data)
-        insert_teams_from_competitions(conn, competitions_data)
+        competitions = competitions_data.get("competitions", [])
+
+        insert_competitions(conn, competitions_data)
+        insert_matches(conn, competitions)
+        insert_teams_and_players(conn, competitions)
 
     finally:
         if conn:
