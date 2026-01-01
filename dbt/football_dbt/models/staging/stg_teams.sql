@@ -1,0 +1,17 @@
+select 
+    id,
+    comp_id,
+    name as team_name,
+    code as team_code,
+    flag,
+    team_emblem,
+    founded,
+    venue,
+    website,
+    club_colors,
+    address,
+    last_updated,
+    inserted_at
+from {{ source('raw', 'teams') }}
+
+    

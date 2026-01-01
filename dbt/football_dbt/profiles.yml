@@ -1,0 +1,12 @@
+dbt_football :
+  target : dev
+  outputs : 
+    dev : 
+      type : postgres
+      host : postgres
+      user : football_user
+      password : miharbiikun7625
+      port : 5432
+      dbname : football_db
+      schema : analytics
+      threads : 4 
