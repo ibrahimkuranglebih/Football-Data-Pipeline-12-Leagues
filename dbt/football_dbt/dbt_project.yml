@@ -1,0 +1,10 @@
+name : football_dbt
+version : 1.0
+profile : football_dbt
+
+models : 
+  football_dbt :
+    staging : 
+      materialized : view
+    marts : 
+      materialized : view
