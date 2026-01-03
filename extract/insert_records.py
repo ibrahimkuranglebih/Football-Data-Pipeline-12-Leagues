@@ -227,7 +227,7 @@ def main():
     try:
         conn = connect_to_db()
         create_tables(conn)
-
+        
         competitions_data = fetch_competitions()
         competitions = competitions_data.get("competitions", [])
 
