@@ -12,6 +12,6 @@ with teams_sources as (select
     address,
     last_updated,
     inserted_at
-from {{ source('raw', 'teams') }})
+from "football_db"."raw"."teams")
 
 select * from teams_sources
