@@ -1,4 +1,9 @@
-with matches_sources as (
+
+  create view "football_db"."analytics"."stg_matches__dbt_tmp"
+    
+    
+  as (
+    with matches_sources as (
     select
         id,
         date,
@@ -18,7 +23,8 @@ with matches_sources as (
         (score::jsonb -> 'fullTime' ->> 'away')::int as away_final_score,
         last_updated,
         inserted_at
-    from {{ source('raw', 'matches') }}
+    from "football_db"."raw"."matches"
 )
 
 select * from matches_sources
+  );

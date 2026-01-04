@@ -1,4 +1,9 @@
-with competitions_sources as (select 
+
+  create view "football_db"."analytics"."stg_competitions__dbt_tmp"
+    
+    
+  as (
+    with competitions_sources as (select 
     id,
     name,
     code,
@@ -14,6 +19,7 @@ with competitions_sources as (select
     (raw_payload -> 'numberOfAvailableSeasons'):: INT as number_available_seasons,
     last_updated,
     inserted_at
-from {{source('raw', 'competitions')}})
+from "football_db"."raw"."competitions")
 
 select * from competitions_sources
+  );

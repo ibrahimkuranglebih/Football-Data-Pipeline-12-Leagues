@@ -14,6 +14,6 @@ with competitions_sources as (select
     (raw_payload -> 'numberOfAvailableSeasons'):: INT as number_available_seasons,
     last_updated,
     inserted_at
-from {{source('raw', 'competitions')}})
+from "football_db"."raw"."competitions")
 
 select * from competitions_sources

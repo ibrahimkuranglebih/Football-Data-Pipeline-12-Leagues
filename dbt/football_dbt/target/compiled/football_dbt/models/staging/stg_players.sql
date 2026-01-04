@@ -7,8 +7,8 @@ with players_sources as (select
     team.name as current_team,
     players.last_updated,
     players.inserted_at
-from {{ source('raw', 'players') }} players
-left join {{ source('raw', 'teams')}} team
+from "football_db"."raw"."players" players
+left join "football_db"."raw"."teams" team
 on players.current_team = team.id)
 
 select * from players_sources

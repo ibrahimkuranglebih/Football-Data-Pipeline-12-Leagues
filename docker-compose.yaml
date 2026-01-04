@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   postgres:
     image: postgres:17
@@ -36,6 +34,24 @@ services:
     networks:
       - football-network
     restart: "no"
+
+  dbt : 
+    container_name : dbt-football-container
+    image : ghcr.io/dbt-labs/dbt-postgres:1.9.latest
+    volumes : 
+      - ./dbt/football_dbt:/usr/app
+      - ./dbt:/root/.dbt
+    working_dir : /usr/app
+    environment : 
+      DBT_PROFILES_DIR : "/root/.dbt"
+    depends_on : 
+      postgres : 
+        condition : service_healthy
+      extract_competitions : 
+        condition : service_completed_successfully
+    networks :
+      - football-network
+    command : run
 
 volumes:
   postgres_data:
