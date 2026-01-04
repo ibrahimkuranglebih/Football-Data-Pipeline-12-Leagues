@@ -1,4 +1,4 @@
-dbt_football :
+football_dbt :
   target : dev
   outputs : 
     dev : 

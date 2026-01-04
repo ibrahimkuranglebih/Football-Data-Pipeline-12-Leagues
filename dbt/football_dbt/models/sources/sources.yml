@@ -1,0 +1,71 @@
+version : 2
+
+sources : 
+  - name : raw
+    database : football_db
+    schema : raw
+    
+    tables : 
+    - name : competitions
+      columns : 
+      - name : id
+      - name : name
+      - name : code
+      - name : type 
+      - name : plan
+      - name : area_id
+      - name : area_name
+      - name : season_id
+      - name : season_start
+      - name : season_end
+      - name : emblem
+      - name : last_updated
+      - name : raw_payload
+      - name : inserted_at
+
+    - name : matches
+      columns : 
+      - name : id
+      - name : date
+      - name : area_id
+      - name : competition_id
+      - name : season_id
+      - name : status
+      - name : duration_status
+      - name : stage
+      - name : group_name
+      - name : home_team
+      - name : away_team
+      - name : score
+      - name : last_updated
+      - name : raw_payload
+      - name : inserted_at
+
+    - name : teams
+      columns : 
+      - name : id
+      - name : comp_id
+      - name : name
+      - name : code
+      - name : flag
+      - name : team_emblem
+      - name : founded
+      - name : venue
+      - name : website
+      - name : club_colors
+      - name : address
+      - name : last_updated
+      - name : raw_payload
+      - name : inserted_at
+
+    - name : players
+      columns : 
+      - name : id
+      - name : name
+      - name : date_of_birth
+      - name : nationality
+      - name : position
+      - name : current_team
+      - name : last_updated
+      - name : raw_payload
+      - name : inserted_at

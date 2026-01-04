@@ -1,4 +1,9 @@
-with teams_sources as (select 
+
+  create view "football_db"."analytics"."stg_teams__dbt_tmp"
+    
+    
+  as (
+    with teams_sources as (select 
     id,
     comp_id,
     name as team_name,
@@ -12,6 +17,7 @@ with teams_sources as (select
     address,
     last_updated,
     inserted_at
-from {{ source('raw', 'teams') }})
+from "football_db"."raw"."teams")
 
 select * from teams_sources
+  );

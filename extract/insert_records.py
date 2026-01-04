@@ -134,20 +134,20 @@ def insert_matches(conn, competitions):
                     VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     ON CONFLICT (id) DO NOTHING;
                 """, (
-                    match.get("id") ,#id match
-                    match.get("utcDate") ,#tanggal dalam UTC
-                    match.get("area", {}).get("id") ,#id area
-                    comp_id ,#id kompetisi
-                    match["season"]["id"] , #id musim
-                    match.get("status") , #status match
-                    match["score"]["duration"] , #status durasi permainan
-                    match.get("stage") , #stage pertandingan
-                    match.get("group") , #group match 
-                    Json(match.get("homeTeam")) , #data singkat tuan rumah
-                    Json(match.get("awayTeam")) , #data singkat tamu 
-                    Json(match.get("score")) , #data singkat pertandingan
-                    match.get("lastUpdated") ,#terakhir diperbarui
-                    Json(match) #raw payload
+                    match.get("id") ,
+                    match.get("utcDate") ,
+                    match.get("area", {}).get("id") ,
+                    comp_id ,
+                    match["season"]["id"] , 
+                    match.get("status") , 
+                    match["score"]["duration"] , 
+                    match.get("stage") , 
+                    match.get("group") ,  
+                    Json(match.get("homeTeam")) , 
+                    Json(match.get("awayTeam")) ,  
+                    Json(match.get("score")) ,
+                    match.get("lastUpdated") ,
+                    Json(match) 
                 ))
 
             conn.commit()
@@ -205,7 +205,7 @@ def insert_teams_and_players(conn, competitions):
                         p.get("nationality"),
                         p.get("position"),
                         team["id"],
-                        p.get("lastUpdated"),
+                        team.get("lastUpdated"),
                         Json(p)
                     ))
 
