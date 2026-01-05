@@ -12,7 +12,7 @@ Football Data Pipeline was a data engineering system to fetching, saving, and tr
 
 # **🛠️ Tech Stacks**
 * Use **Python** as programming language
-* **Postgres** 17 for football database
+* **Postgres** 17 for football database <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-plain-wordmark.svg" height="40" alt="docker-logo"/>
 * **Dbt** for data transformations
 * Process orchestration using **Airflow**
 * Containerized in **Docker**
@@ -22,7 +22,6 @@ Football Data API -> extract using python -> load into postgres -> transform int
 
 
 <div align="left">
-  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" alt="javascript logo"  />
   <img width="12" />
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" height="40" alt="typescript logo"  />
   <img width="12" />
