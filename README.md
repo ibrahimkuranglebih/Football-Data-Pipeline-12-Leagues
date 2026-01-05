@@ -11,11 +11,6 @@ Football Data Pipeline was a data engineering system to fetching, saving, and tr
 * Functions Naming : Snake Case (connect_to_db())
 
 # **🛠️ Tech Stacks**
-* Use **Python** as programming language
-* **Postgres** 17 for football database 
-* **Dbt** for data transformations
-* Process orchestration using **Airflow**
-* Containerized in **Docker**
 <div align="left">
   <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-plain-wordmark.svg" height="40" alt="docker-logo"/>
   <img width="12"/>
