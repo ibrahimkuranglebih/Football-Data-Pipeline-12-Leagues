@@ -1,19 +1,31 @@
-INI README 
-- PENAMAAN FILE : SNAKE CASE (insert_records.py)
-- PENAMAAN FOLDER : FISHBONE (football-data-pipeline)
+# **⚽ Football Data Pipeline**
 
-Data football ini digunakan untuk
-- analitik data sepakbola (matches, teams, competitions, pemain (saat ini pemain belum memungkinkan))
-- membuat keputusan dan prediksi dari data sepakbola
+Football Data Pipeline was a data engineering system to fetching, saving, and transforming football (in america it call soccer btw) data from 12 world famous competitions (including FIFA World Cup) into the ready-to-use data. This project was built to :
+* football analytics purpose
+* make decisions and predictions from football data
 
-Dengan data yang diambil berupa data pertandingan, tim, kompetisi, hingga pemain dari tiap 12 liga utama. Data yang diambil merupakan data yang terbaru, sehingga dapat meningkatkan hasil penggunaan dari data ini.
- 
-Pada football data pipeline ini saya punya arsitektur berikut
-- menggunakan python sbagai bahasa utama
-- menggunakan postgres 17 sebagai database
-- menggunakan dbt untuk transformasi data
-- menggunakan airflow untuk orkestrasi pengambilan data
-- semua proses berjalan menggunakan docker
-- akan ada pembersihan data yang nantinya akan dilakukan setelah semua arsitektur sebelumnya telah selesai
+# **📖 Code Guideline**
+* File Naming : Snake Case (insert_records.py)
+* Folder Naming : Fishbone (football-data-pipeline)
+* Variable Naming : Snake Case (teams_data)
+* Functions Naming : Snake Case (connect_to_db())
 
-diharapkan dengan adanya dapat data pipeline ini, akan dapat memudahkan penggunaan data yang diambil oleh para analyst dan pekerja data lainnya.
+# **🛠️ Tech Stacks**
+* Use **Python** as programming language
+* **Postgres** 17 for football database 
+* **Dbt** for data transformations
+* Process orchestration using **Airflow**
+* Containerized in **Docker**
+<div align="left">
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-plain-wordmark.svg" height="40" alt="docker-logo"/>
+  <img width="12"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apacheairflow/apacheairflow-original-wordmark.svg" height="40" alt="apache-airflow-logo"/>
+  <img width="12"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" height="40" alt="python-logo"/>
+  <img width="12"/>
+  <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg" height="40" alt="postgres-logo"/>
+</div>
+
+# **🔁 Data Fetch Flow**
+Football Data API -> extract using python -> load into postgres -> transform into prepared data using dbt -->> containerized in Docker
+
