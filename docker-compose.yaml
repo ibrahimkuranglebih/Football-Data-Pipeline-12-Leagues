@@ -53,6 +53,26 @@ services:
       - football-network
     command : run
 
+  airflow : 
+    container_name : airflow-container
+    image : apache/airflow:3.0.0
+    ports : 
+      - 8000:8080
+    environment : 
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN : postgresql+psycopg2://airflow:airflow@db:5432/airflow_db
+    volumes : 
+      - ./airflow/dags:/opt/airflow/dags
+      - ./extract:/opt/airflow/extract
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add : 
+      - 1001
+    depends_on : postgres
+    networks : 
+      - football-network
+    command : > 
+      bash -c "airflow db migrate && airflow standalone"
+
+
 volumes:
   postgres_data:
 
