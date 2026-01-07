@@ -1,80 +1,42 @@
 services:
   postgres:
     image: postgres:17
-    container_name: football-postgres
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: football_db
       POSTGRES_USER: football_user
       POSTGRES_PASSWORD: miharbiikun7625
-    ports:
-      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/data:/var/lib/postgresql/data
       - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - football-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U football_user -d football_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
-  extract_competitions:
-    build: ./extract
-    container_name: extract-competitions
-    depends_on:
-      postgres :
-        condition: service_healthy
+  airflow:
+    container_name: football_airflow
+    image: apache/airflow:3.0.0
+    ports:
+      - "8000:8080"
     environment:
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow_db
       FOOTBALL_API_KEY: ${FOOTBALL_API_KEY}
       POSTGRES_HOST: postgres
       POSTGRES_DB: football_db
       POSTGRES_USER: football_user
       POSTGRES_PASSWORD: miharbiikun7625
-    networks:
-      - football-network
-    restart: "no"
-
-  dbt : 
-    container_name : dbt-football-container
-    image : ghcr.io/dbt-labs/dbt-postgres:1.9.latest
-    volumes : 
-      - ./dbt/football_dbt:/usr/app
-      - ./dbt:/root/.dbt
-    working_dir : /usr/app
-    environment : 
-      DBT_PROFILES_DIR : "/root/.dbt"
-    depends_on : 
-      postgres : 
-        condition : service_healthy
-      extract_competitions : 
-        condition : service_completed_successfully
-    networks :
-      - football-network
-    command : run
-
-  airflow : 
-    container_name : airflow-container
-    image : apache/airflow:3.0.0
-    ports : 
-      - 8000:8080
-    environment : 
-      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN : postgresql+psycopg2://airflow:airflow@db:5432/airflow_db
-    volumes : 
+    volumes:
       - ./airflow/dags:/opt/airflow/dags
       - ./extract:/opt/airflow/extract
       - /var/run/docker.sock:/var/run/docker.sock
-    group_add : 
+    group_add:
       - 1001
-    depends_on : postgres
-    networks : 
+    depends_on:
+      - postgres
+    networks:
       - football-network
-    command : > 
+    command: >
       bash -c "airflow db migrate && airflow standalone"
-
-
-volumes:
-  postgres_data:
 
 networks:
   football-network:

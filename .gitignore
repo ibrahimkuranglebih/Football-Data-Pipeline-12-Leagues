@@ -2,3 +2,4 @@
 .env.*
 dbt/football_dbt/target/
 dbt/football_dbt/logs/
+postgres/data/

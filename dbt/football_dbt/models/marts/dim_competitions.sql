@@ -4,7 +4,9 @@
     )
 }}
 
-select * from 
-{{ref('stg_players')}}
+select 
+    *
+from
+{{ref('stg_competitions')}}
 order by 
 id
