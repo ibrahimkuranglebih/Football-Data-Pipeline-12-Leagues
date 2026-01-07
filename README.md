@@ -1,5 +1,5 @@
 # **⚽ Football Data Pipeline**
-
+[![][]][]
 Football Data Pipeline was a data engineering system to fetching, saving, and transforming football (in america it call soccer btw) data from 12 world famous competitions (including FIFA World Cup) into the ready-to-use data. 
 
 # **Purpose**
@@ -25,9 +25,9 @@ Football Data API -> extract using python -> load into postgres -> transform int
 [DBT-Url]:https://www.getdbt.com/
 [Postgres-Url]:https://www.postgresql.org/
 <!--Logo-->
-[Docker-Logo]:https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/docker/docker-plain-wordmark.svg
-[Apache-Airflow-Logo]:https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apacheairflow/apacheairflow-original-wordmark.svg
-[Python-Logo]:https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg
-[Postgres-Logo]:https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original.svg
+[Docker-Logo]:https://img.shields.io/badge/logo-Docker-blue?logo=docker&logoColor=ffffff
+[Apache-Airflow-Logo]:https://img.shields.io/badge/logo-Apache_Airflow-blue?logo=apacheairflow&logoColor=ffffff
+[Python-Logo]:https://img.shields.io/badge/logo-Python-blue?logo=python&logoColor=ffffff
+[Postgres-Logo]:https://img.shields.io/badge/logo-Postgres-blue?logo=postgresql&logoColor=ffffff
 [DBT-Logo]:https://www.shadcn.io/icon/logos-dbt
 [Version-Shield]: https://img.shields.io/github/Version-V.1.0-brightgreen/style=for-the-badge
