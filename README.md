@@ -1,5 +1,5 @@
 # **⚽ Football Data Pipeline**
-[![Version][Verison-Shield]]
+[![Version][Verison-Shield]][Version-Url]
 Football Data Pipeline was a data engineering system to fetching, saving, and transforming football (in america it call soccer btw) data from 12 world famous competitions (including FIFA World Cup) into the ready-to-use data. 
 
 # **Purpose**
@@ -24,6 +24,7 @@ Football Data API -> extract using python -> load into postgres -> transform int
 [Python-Url]:https://www.python.org/
 [DBT-Url]:https://www.getdbt.com/
 [Postgres-Url]:https://www.postgresql.org/
+[Version-Url]:https://github.com/ibrahimkuranglebih/Football-Data-Pipeline-12-Leagues?tab=readme-ov-file
 <!--Logo-->
 [Docker-Logo]:https://img.shields.io/badge/logo-Docker-blue?logo=docker&logoColor=ffffff
 [Apache-Airflow-Logo]:https://img.shields.io/badge/logo-Apache_Airflow-blue?logo=apacheairflow&logoColor=ffffff
