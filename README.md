@@ -14,7 +14,7 @@ This project was initiated to bring some points, including **:**
 * [![Python][Python-Logo]][Python-Url]
 * [![Postgres][Postgres-Logo]][Postgres-Url]
 
-# **🔁 Data Fetch Flow**
+# **🔁 Data Pipeline Flow**
 <img alt='elt' src='assets/Data-Pipeline-Football.png' />
 
 <!--Markdown Links & Images-->
