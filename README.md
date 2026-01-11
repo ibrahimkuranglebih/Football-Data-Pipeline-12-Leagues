@@ -15,7 +15,7 @@ This project was initiated to bring some points, including **:**
 * [![Postgres][Postgres-Logo]][Postgres-Url]
 
 # **🔁 Data Fetch Flow**
-<img alt='elt' src='/repos/football-data-pipeline/assets/Data-Pipeline-Football.png' />
+<img alt='elt' src='https://raw.githubusercontent.com/ibrahimkuranglebih/Football-Data-Pipeline-12-Leagues/assets/Data-Pipeline-Football.png' />
 
 <!--Markdown Links & Images-->
 <!--Url-->
