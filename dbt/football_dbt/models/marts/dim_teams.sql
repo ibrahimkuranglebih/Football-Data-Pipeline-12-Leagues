@@ -5,6 +5,6 @@
 }}
 
 select * from 
-{{ref('stg_players')}}
+{{ref('stg_teams')}}
 order by 
 id

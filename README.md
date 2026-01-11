@@ -1,7 +1,7 @@
 # **⚽ Football Data Pipeline**
 ![Version][Version-Shield]
 
-Football Data Pipeline was a data engineering system to fetching, saving, and transforming football (in america it call soccer btw) data from 12 world famous competitions (including FIFA World Cup) into the ready-to-use data. 
+Football Data Pipeline was a data engineering system to fetching, saving, and transforming football (in america it call soccer btw) data from 12 world famous competitions (including FIFA World Cup) into the ready-to-use data. This data pipeline was built using ELT method to ingest data from football data api. 
 
 # **Purpose**
 This project was initiated to bring some points, including **:**
