@@ -15,7 +15,7 @@ This project was initiated to bring some points, including **:**
 * [![Postgres][Postgres-Logo]][Postgres-Url]
 
 # **🔁 Data Fetch Flow**
-Football Data API -> extract using python -> load into postgres -> transform into prepared data using dbt -->> containerized in Docker
+<img alt='elt' src='/repos/football-data-pipeline/assets/Data-Pipeline-Football.png' />
 
 <!--Markdown Links & Images-->
 <!--Url-->
