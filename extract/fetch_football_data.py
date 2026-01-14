@@ -44,6 +44,5 @@ def fetch_competitions():
 def fetch_matches_by_competition(competition_id: int):
     return fetch_data(f"competitions/{competition_id}/matches")
 
-
 def fetch_teams_by_competition(competition_id: int):
     return fetch_data(f"competitions/{competition_id}/teams")

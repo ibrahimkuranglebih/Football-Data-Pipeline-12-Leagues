@@ -4,9 +4,9 @@ football_dbt :
     dev : 
       type : postgres
       host : postgres
-      user : football_user
-      password : miharbiikun7625
+      user : "{{env_var('POSTGRES_USER')}}"
+      password : "{{env_var('POSTGRES_PASSWORD')}}"
       port : 5432
-      dbname : football_db
+      dbname : "{{env_var('POSTGRES_DB')}}"
       schema : analytics
       threads : 4 

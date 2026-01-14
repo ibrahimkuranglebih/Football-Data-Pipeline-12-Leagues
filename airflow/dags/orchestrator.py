@@ -5,6 +5,7 @@ from airflow.providers.docker.operators.docker import DockerOperator
 from datetime import datetime, timedelta
 from docker.types import Mount
 import pendulum
+import os
 
 sys.path.append('/opt/airflow/extract')
 
@@ -37,6 +38,11 @@ with DAG(
         image='ghcr.io/dbt-labs/dbt-postgres:1.9.latest',
         command='run --project-dir /usr/app',
         working_dir='/usr/app',
+        environment={
+            "POSTGRES_USER": os.environ["POSTGRES_USER"],
+            "POSTGRES_PASSWORD": os.environ["POSTGRES_PASSWORD"],
+            "POSTGRES_DB": os.environ["POSTGRES_DB"],
+        },
         mounts=[
             Mount(
                 source='/home/ibrahim/repos/football-data-pipeline/dbt/football_dbt',
