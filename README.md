@@ -29,4 +29,4 @@ This project was initiated to bring some points, including **:**
 [Apache-Airflow-Logo]:https://img.shields.io/badge/Apache_Airflow-017CEE?logo=apacheairflow&logoColor=ffffff
 [Python-Logo]:https://img.shields.io/badge/Python-FBEF76?logo=python&logoColor=ffffff
 [Postgres-Logo]:https://img.shields.io/badge/Postgres-4169E1?logo=postgresql&logoColor=ffffff
-[Version-Shield]:https://img.shields.io/badge/Version-1.0-blue
+[Version-Shield]:https://img.shields.io/badge/Version-1.1-blue
