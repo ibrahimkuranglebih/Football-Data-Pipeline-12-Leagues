@@ -39,9 +39,9 @@ with DAG(
         command='run --project-dir /usr/app',
         working_dir='/usr/app',
         environment={
-            "POSTGRES_USER": os.environ["POSTGRES_USER"],
-            "POSTGRES_PASSWORD": os.environ["POSTGRES_PASSWORD"],
-            "POSTGRES_DB": os.environ["POSTGRES_DB"],
+            "POSTGRES_USER": os.environ.get("POSTGRES_USER"),
+            "POSTGRES_PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+            "POSTGRES_DB": os.environ.get("POSTGRES_DB"),
         },
         mounts=[
             Mount(
