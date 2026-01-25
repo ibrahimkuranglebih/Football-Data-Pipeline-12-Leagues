@@ -99,10 +99,30 @@ def insert_competitions(conn, data):
     cursor = conn.cursor()
     for comp in data.get("competitions", []):
         season = comp.get("currentSeason") or {}
+
         cursor.execute("""
-            INSERT INTO raw.competitions
+            INSERT INTO raw.competitions (
+                id, name, code, type, plan,
+                area_id, area_name,
+                season_id, season_start, season_end,
+                emblem, last_updated, raw_payload
+            )
             VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-            ON CONFLICT (id) DO NOTHING;
+            ON CONFLICT (id) DO UPDATE
+            SET
+                name = EXCLUDED.name,
+                code = EXCLUDED.code,
+                type = EXCLUDED.type,
+                plan = EXCLUDED.plan,
+                area_id = EXCLUDED.area_id,
+                area_name = EXCLUDED.area_name,
+                season_id = EXCLUDED.season_id,
+                season_start = EXCLUDED.season_start,
+                season_end = EXCLUDED.season_end,
+                emblem = EXCLUDED.emblem,
+                last_updated = EXCLUDED.last_updated,
+                raw_payload = EXCLUDED.raw_payload
+            WHERE raw.competitions.last_updated < EXCLUDED.last_updated;
         """, (
             comp.get("id"),
             comp.get("name"),
@@ -130,29 +150,47 @@ def insert_matches(conn, competitions):
 
             for match in data.get("matches", []):
                 cursor.execute("""
-                    INSERT INTO raw.matches
+                    INSERT INTO raw.matches (
+                        id, date, area_id, competition_id, season_id,
+                        status, duration_status, stage, group_name,
+                        home_team, away_team, score,
+                        last_updated, raw_payload
+                    )
                     VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                    ON CONFLICT (id) DO NOTHING;
+                    ON CONFLICT (id) DO UPDATE
+                    SET
+                        date = EXCLUDED.date,
+                        status = EXCLUDED.status,
+                        duration_status = EXCLUDED.duration_status,
+                        stage = EXCLUDED.stage,
+                        group_name = EXCLUDED.group_name,
+                        home_team = EXCLUDED.home_team,
+                        away_team = EXCLUDED.away_team,
+                        score = EXCLUDED.score,
+                        last_updated = EXCLUDED.last_updated,
+                        raw_payload = EXCLUDED.raw_payload
+                    WHERE raw.matches.last_updated < EXCLUDED.last_updated;
                 """, (
-                    match.get("id") ,
-                    match.get("utcDate") ,
-                    match.get("area", {}).get("id") ,
-                    comp_id ,
-                    match["season"]["id"] , 
-                    match.get("status") , 
-                    match["score"]["duration"] , 
-                    match.get("stage") , 
-                    match.get("group") ,  
-                    Json(match.get("homeTeam")) , 
-                    Json(match.get("awayTeam")) ,  
-                    Json(match.get("score")) ,
-                    match.get("lastUpdated") ,
-                    Json(match) 
+                    match.get("id"),
+                    match.get("utcDate"),
+                    match.get("area", {}).get("id"),
+                    comp_id,
+                    match["season"]["id"],
+                    match.get("status"),
+                    match["score"]["duration"],
+                    match.get("stage"),
+                    match.get("group"),
+                    Json(match.get("homeTeam")),
+                    Json(match.get("awayTeam")),
+                    Json(match.get("score")),
+                    match.get("lastUpdated"),
+                    Json(match)
                 ))
 
             conn.commit()
 
         except Exception as e:
+            conn.rollback()
             print(f"Skip matches {comp_id}: {e}")
 
 def insert_teams_and_players(conn, competitions):
@@ -167,17 +205,34 @@ def insert_teams_and_players(conn, competitions):
 
             for team in teams_data.get("teams", []):
                 cursor.execute("""
-                    INSERT INTO raw.teams
-                    VALUES (%s, ARRAY[%s], %s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                    ON CONFLICT (id)
-                    DO UPDATE SET
+                    INSERT INTO raw.teams (
+                        id, comp_id, name, code, flag,
+                        team_emblem, founded, venue,
+                        website, club_colors, address,
+                        last_updated, raw_payload
+                    )
+                    VALUES (%s, ARRAY[%s], %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+                    ON CONFLICT (id) DO UPDATE
+                    SET
                         comp_id = (
                             SELECT ARRAY(
                                 SELECT DISTINCT UNNEST(
                                     raw.teams.comp_id || EXCLUDED.comp_id
                                 )
                             )
-                        );
+                        ),
+                        name = EXCLUDED.name,
+                        code = EXCLUDED.code,
+                        flag = EXCLUDED.flag,
+                        team_emblem = EXCLUDED.team_emblem,
+                        founded = EXCLUDED.founded,
+                        venue = EXCLUDED.venue,
+                        website = EXCLUDED.website,
+                        club_colors = EXCLUDED.club_colors,
+                        address = EXCLUDED.address,
+                        last_updated = EXCLUDED.last_updated,
+                        raw_payload = EXCLUDED.raw_payload
+                    WHERE raw.teams.last_updated < EXCLUDED.last_updated;
                 """, (
                     team["id"],
                     comp_id,
@@ -190,14 +245,28 @@ def insert_teams_and_players(conn, competitions):
                     team.get("website"),
                     team.get("clubColors"),
                     team.get("address"),
-                    team.get("lastUpdated")
+                    team.get("lastUpdated"),
+                    Json(team)
                 ))
 
                 for p in team.get("squad", []):
                     cursor.execute("""
-                        INSERT INTO raw.players
+                        INSERT INTO raw.players (
+                            id, name, date_of_birth, nationality,
+                            position, current_team,
+                            last_updated, raw_payload
+                        )
                         VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
-                        ON CONFLICT (id) DO NOTHING;
+                        ON CONFLICT (id) DO UPDATE
+                        SET
+                            name = EXCLUDED.name,
+                            date_of_birth = EXCLUDED.date_of_birth,
+                            nationality = EXCLUDED.nationality,
+                            position = EXCLUDED.position,
+                            current_team = EXCLUDED.current_team,
+                            last_updated = EXCLUDED.last_updated,
+                            raw_payload = EXCLUDED.raw_payload
+                        WHERE raw.players.last_updated < EXCLUDED.last_updated;
                     """, (
                         p.get("id"),
                         p.get("name"),
