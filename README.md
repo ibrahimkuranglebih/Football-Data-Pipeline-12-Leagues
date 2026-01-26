@@ -15,7 +15,7 @@ This project was initiated to bring some points, including **:**
 * [![Postgres][Postgres-Logo]][Postgres-Url]
 
 # **🔁 Data Pipeline Flow**
-<img alt='elt' src='assets/Data-Pipeline-Football.png' />
+<img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
 
 <!--Markdown Links & Images-->
 <!--Url-->
