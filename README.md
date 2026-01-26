@@ -17,6 +17,9 @@ This project was initiated to bring some points, including **:**
 # **🔁 Data Pipeline Flow**
 <img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
 
+#**Author**
+Ibrahim Mumtaz Samadikun - Data and software development enthusiast 
+
 <!--Markdown Links & Images-->
 <!--Url-->
 [Docker-Url]:https://www.docker.com/
