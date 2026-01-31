@@ -19,9 +19,9 @@ This project was initiated to bring some points, including **:**
 
 # **🔁 Data Visualization**
 Premier League Teams Points Progressions **(Per 23rd Matches)**
-<img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
-<img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
-<img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
+<img alt='elt' src='assets/visualization-pl-2026 (1).png' />
+<img alt='elt' src='assets/visualization-pl-2026 (2).png' />
+<img alt='elt' src='assets/visualization-pl-2026 (3).png' />
 
 # **Author**
 Ibrahim Mumtaz Samadikun - Data and software development enthusiast 
