@@ -17,6 +17,12 @@ This project was initiated to bring some points, including **:**
 # **🔁 Data Pipeline Flow**
 <img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
 
+# **🔁 Data Visualization**
+Premier League Teams Points Progressions **(Per 23rd Matches)**
+<img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
+<img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
+<img alt='elt' src='assets/Football Data Pipeline Architecture.jpg' />
+
 # **Author**
 Ibrahim Mumtaz Samadikun - Data and software development enthusiast 
 
